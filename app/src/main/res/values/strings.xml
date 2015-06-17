@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Sunshine</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="abc_today">Today, June 15</string>
+    <string name="abc_day_temperature">21°</string>
+    <string name="abc_night_temperature">8°</string>
+    <string name="abc_icon_cloudy">Cloudy</string>
+    <string name="abc_weather">Cloudy</string>
+</resources>
