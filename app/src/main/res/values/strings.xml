@@ -8,5 +8,5 @@
     <string name="abc_night_temperature">8°</string>
     <string name="abc_icon_cloudy">Cloudy</string>
     <string name="abc_weather">Cloudy</string>
-    <string name="title_activity_detail">DetailActivity</string>
+    <string name="title_activity_detail">Details</string>
 </resources>
