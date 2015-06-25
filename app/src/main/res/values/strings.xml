@@ -28,4 +28,13 @@
     <!-- Default postal code for location preference [CHAR LIMIT=NONE] -->
     <string name="pref_location_default" translatable="false">94043</string>
 
+    <!-- Label for the temperature units preference [CHAR LIMIT=30] -->
+    <string name="pref_units_label">Temperature Units</string>
+
+    <!-- Key name for storing temperature units in SharedPreferences [CHAR LIMIT=NONE] -->
+    <string name="pref_units_key" translatable="false">temperatureUnit</string>
+
+    <!-- Default postal code for temperature units preference [CHAR LIMIT=NONE] -->
+    <string name="pref_units_default" translatable="false">metric</string>
+
 </resources>

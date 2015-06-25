@@ -244,8 +244,8 @@ public class ForecastFragment extends Fragment {
          */
         private String formatHighLows(double high, double low) {
             // For presentation, assume the user doesn't care about tenths of a degree.
-            long roundedHigh = Math.round(high);
-            long roundedLow = Math.round(low);
+            long roundedHigh = Math.round(convertTemperature(high));
+            long roundedLow = Math.round(convertTemperature(low));
 
             String highLowStr = roundedHigh + "/" + roundedLow;
             return highLowStr;
@@ -325,6 +325,19 @@ public class ForecastFragment extends Fragment {
                 //Log.v(LOG_TAG, "Forecast entry: " + s);
             }
             return resultStrs;
+        }
+
+        private double convertTemperature(double t) {
+
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            String temperatureUnit = prefs.getString(getString(R.string.pref_units_key), getString(R.string.pref_units_default));
+
+            if (temperatureUnit.equalsIgnoreCase("imperial"))
+            {
+                t = t * 1.8 + 32;
+            }
+
+            return t;
         }
     }
 }
