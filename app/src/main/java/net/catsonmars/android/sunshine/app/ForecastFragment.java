@@ -330,7 +330,7 @@ public class ForecastFragment extends Fragment {
         private double convertTemperature(double t) {
 
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-            String temperatureUnit = prefs.getString(getString(R.string.pref_units_key), getString(R.string.pref_units_default));
+            String temperatureUnit = prefs.getString(getString(R.string.pref_units_key), getString(R.string.pref_units_metric));
 
             if (temperatureUnit.equalsIgnoreCase("imperial"))
             {
