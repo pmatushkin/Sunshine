@@ -187,7 +187,7 @@ public class WeatherProvider extends ContentProvider {
             }
             // "weather"
             case WEATHER: {
-                return mOpenHelper.getReadableDatabase().query(
+                retCursor = mOpenHelper.getReadableDatabase().query(
                         WeatherContract.WeatherEntry.TABLE_NAME,
                         projection,
                         selection,
@@ -195,10 +195,11 @@ public class WeatherProvider extends ContentProvider {
                         null,
                         null,
                         sortOrder);
+                break;
             }
             // "location"
             case LOCATION: {
-                return mOpenHelper.getReadableDatabase().query(
+                retCursor = mOpenHelper.getReadableDatabase().query(
                         WeatherContract.LocationEntry.TABLE_NAME,
                         projection,
                         selection,
@@ -206,6 +207,7 @@ public class WeatherProvider extends ContentProvider {
                         null,
                         null,
                         sortOrder);
+                break;
             }
 
             default:
@@ -235,7 +237,6 @@ public class WeatherProvider extends ContentProvider {
                 break;
             }
             case LOCATION: {
-                normalizeDate(values);
                 long _id = db.insert(WeatherContract.LocationEntry.TABLE_NAME, null, values);
                 if ( _id > 0 )
                     returnUri = WeatherContract.LocationEntry.buildLocationUri(_id);
