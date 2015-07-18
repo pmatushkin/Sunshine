@@ -34,6 +34,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="net.catsonmars.android.sunshine.app.MainActivity" />
         </activity>
+
+        <provider
+            android:name=".data.WeatherProvider"
+            android:authorities="net.catsonmars.android.sunshine.app" />
     </application>
 
 </manifest>

@@ -72,6 +72,8 @@ public class DetailActivity extends ActionBarActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
 
+            Log.d(LOG_TAG, "In DetailActivity.java...");
+
             View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
 
             String extra = Intent.EXTRA_TEXT;
