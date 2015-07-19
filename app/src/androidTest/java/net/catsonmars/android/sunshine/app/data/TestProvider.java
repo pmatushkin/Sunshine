@@ -265,7 +265,6 @@ public class TestProvider extends AndroidTestCase {
 
         // Create a cursor with observer to make sure that the content provider is notifying
         // the observers as expected
-        //Cursor locationCursor = mContext.getContentResolver().query(LocationEntry.buildLocationUri(locationRowId), null, null, null, null);
         Cursor locationCursor = mContext.getContentResolver().query(LocationEntry.CONTENT_URI, null, null, null, null);
 
         TestUtilities.TestContentObserver tco = TestUtilities.getTestContentObserver();
