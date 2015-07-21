@@ -1,10 +1,8 @@
 package net.catsonmars.android.sunshine.app;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -95,9 +93,7 @@ public class MainActivity extends ActionBarActivity {
 
     private void openPreferredLocationInMap() {
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String location = prefs.getString(getString(R.string.pref_location_key),
-                getString(R.string.pref_location_default));
+        String location = Utility.getPreferredLocation(this);
 
         Intent intent = new Intent(Intent.ACTION_VIEW);
         if (intent.resolveActivity(getPackageManager()) != null) {
