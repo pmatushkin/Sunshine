@@ -107,7 +107,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, Void> {
      * into an Object hierarchy for us.
      */
     private void getWeatherDataFromJson(String forecastJsonStr,
-                                            String locationSetting)
+                                        String locationSetting)
             throws JSONException {
 
         // Now we have a String representing the complete forecast in JSON Format.
@@ -249,7 +249,6 @@ public class FetchWeatherTask extends AsyncTask<String, Void, Void> {
     }
 
     @Override
-//    protected String[] doInBackground(String... params) {
     protected Void doInBackground(String... params) {
 
         // If there's no zip code, there's nothing to look up.  Verify size of params.
