@@ -108,13 +108,6 @@ public class ForecastFragment extends Fragment
     }
 
     @Override
-    public void onStart(){
-        super.onStart();
-
-        updateWeather();
-    }
-
-    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.forecastfragment, menu);
     }
@@ -174,5 +167,11 @@ public class ForecastFragment extends Fragment
         });
 
         return rootView;
+    }
+
+    public void onLocationChanged() {
+        updateWeather();
+
+        getLoaderManager().restartLoader(FORECAST_LOADER, null, this);
     }
 }
