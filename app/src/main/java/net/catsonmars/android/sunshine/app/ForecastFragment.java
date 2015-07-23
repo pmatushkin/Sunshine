@@ -27,7 +27,7 @@ public class ForecastFragment extends Fragment
 
     private static final int FORECAST_LOADER = 0;
 
-    private static final String[] FORECAST_COLUMNS = {
+    static final String[] FORECAST_COLUMNS = {
             // In this case the id needs to be fully qualified with a table name, since
             // the content provider joins the location & weather tables in the background
             // (both have an _id column)
