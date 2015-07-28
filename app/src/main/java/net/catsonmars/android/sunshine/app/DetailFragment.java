@@ -89,7 +89,7 @@ public class DetailFragment extends Fragment
     @Override
     public CursorLoader onCreateLoader(int loaderID, Bundle bundle) {
         Intent intent = getActivity().getIntent();
-        if (intent == null) {
+        if (intent == null || intent.getData() == null) {
             return null;
         }
 
