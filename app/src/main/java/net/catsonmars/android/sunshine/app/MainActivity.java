@@ -8,8 +8,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import net.catsonmars.android.sunshine.app.data.WeatherContract;
 
-public class MainActivity extends ActionBarActivity {
+
+public class MainActivity extends ActionBarActivity
+        implements ForecastFragment.Callback {
 
     private final String LOG_TAG = MainActivity.class.getSimpleName();
     private final String DETAILFRAGMENT_TAG = "DFTAG";
@@ -35,7 +38,7 @@ public class MainActivity extends ActionBarActivity {
             // fragment transaction.
             if (savedInstanceState == null) {
                 getSupportFragmentManager().beginTransaction()
-                        .add(R.id.weather_detail_container, new DetailFragment())
+                        .add(R.id.weather_detail_container, new DetailFragment(), DETAILFRAGMENT_TAG)
                         .commit();
             }
         } else {
@@ -79,13 +82,19 @@ public class MainActivity extends ActionBarActivity {
 
         String currentLocation = Utility.getPreferredLocation(this);
 
-        if (currentLocation != mLocation) {
+        if (currentLocation != null && !currentLocation.equals(mLocation)) {
             ForecastFragment ff = (ForecastFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_forecast);
+            if (null != ff) {
+                ff.onLocationChanged();
+            }
 
-            ff.onLocationChanged();
+            DetailFragment df = (DetailFragment)getSupportFragmentManager().findFragmentByTag(DETAILFRAGMENT_TAG);
+            if (null != df) {
+                df.onLocationChanged(currentLocation);
+            }
+
             mLocation = currentLocation;
         }
-
     }
 
     @Override
@@ -93,6 +102,26 @@ public class MainActivity extends ActionBarActivity {
         Log.d(LOG_TAG, "In onPause");
 
         super.onPause();
+    }
+
+    public void onItemSelected(Uri dateUri) {
+        if (true == mTwoPane) {
+            // on tablet, replace DetailFragment
+            Bundle args = new Bundle();
+            args.putParcelable(DetailFragment.DETAIL_URI, dateUri);
+
+            DetailFragment f = new DetailFragment();
+            f.setArguments(args);
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.weather_detail_container, f, DETAILFRAGMENT_TAG)
+                    .commit();
+
+        } else {
+            // on phone, launch DetailActivity
+            Intent intent = new Intent(this, DetailActivity.class).setData(dateUri);
+            startActivity(intent);
+        }
     }
 
     @Override

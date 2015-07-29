@@ -3,6 +3,7 @@ package net.catsonmars.android.sunshine.app;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -30,6 +31,7 @@ public class DetailFragment extends Fragment
         implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int DETAIL_LOADER = 0;
+    static final String DETAIL_URI = "URI";
 
     private static final String[] DETAIL_COLUMNS = {
             // In this case the id needs to be fully qualified with a table name, since
@@ -71,6 +73,7 @@ public class DetailFragment extends Fragment
     private static final String FORECAST_SHARE_HASHTAG = " #SunshineApp";
     private ShareActionProvider mShareActionProvider;
     private String mForecastStr;
+    private Uri mUri;
 
     ImageView mIconView;
     TextView mDateView;
@@ -86,21 +89,41 @@ public class DetailFragment extends Fragment
         setHasOptionsMenu(true);
     }
 
+    public int getShownIndex() {
+        return getArguments().getInt("index", 0);
+    }
+
+    void onLocationChanged(String newLocation) {
+        Uri uri = mUri;
+
+        if (null != uri) {
+            long date = WeatherContract.WeatherEntry.getDateFromUri(uri);
+            Uri updatedUri = WeatherContract.WeatherEntry.buildWeatherLocationWithDate(newLocation, date);
+            mUri = updatedUri;
+
+            getLoaderManager().restartLoader(DETAIL_LOADER, null, this);
+        }
+    }
+
     @Override
     public CursorLoader onCreateLoader(int loaderID, Bundle bundle) {
-        Intent intent = getActivity().getIntent();
-        if (intent == null || intent.getData() == null) {
+//        Intent intent = getActivity().getIntent();
+//        if (intent == null || intent.getData() == null) {
+//            return null;
+//        }
+
+        if (null != mUri) {
+            return new CursorLoader(
+                    getActivity(),
+                    mUri,
+                    DETAIL_COLUMNS,
+                    null,
+                    null,
+                    null
+            );
+        } else {
             return null;
         }
-
-        return new CursorLoader(
-                getActivity(),
-                intent.getData(),
-                DETAIL_COLUMNS,
-                null,
-                null,
-                null
-        );
     }
 
     @Override
@@ -174,8 +197,12 @@ public class DetailFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         Log.d(LOG_TAG, "In DetailActivity.java...");
+
+        Bundle args = getArguments();
+        if (null != args) {
+            mUri = args.getParcelable(DetailFragment.DETAIL_URI);
+        }
 
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
 
