@@ -20,6 +20,7 @@ public class ForecastAdapter extends CursorAdapter {
     private static final int VIEW_TYPE_COUNT = 2;
 
     Context context;
+    private Boolean mUseTodayLayout;
 
     public ForecastAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
@@ -72,10 +73,17 @@ public class ForecastAdapter extends CursorAdapter {
         switch (viewType)
         {
             case VIEW_TYPE_TODAY : {
-                layoutId = R.layout.list_item_forecast_today;
+                // Get a regular layout for a tablet
+                if (mUseTodayLayout) {
+                    // Get Today layout for a phone
+                    layoutId = R.layout.list_item_forecast_today;
+                } else {
+                    layoutId = R.layout.list_item_forecast;
+                }
                 break;
             }
             default : {
+                // Get a regular layout
                 layoutId = R.layout.list_item_forecast;
                 break;
             }
@@ -102,8 +110,13 @@ public class ForecastAdapter extends CursorAdapter {
         switch (viewType)
         {
             case VIEW_TYPE_TODAY : {
-                // Get weather art
-                viewHolder.iconView.setImageResource(Utility.getArtResourceForWeatherCondition(weatherId));
+                if (mUseTodayLayout) {
+                    // Get weather art for a phone layout
+                    viewHolder.iconView.setImageResource(Utility.getArtResourceForWeatherCondition(weatherId));
+                } else {
+                    // Get weather icon for a table layout
+                    viewHolder.iconView.setImageResource(Utility.getIconResourceForWeatherCondition(weatherId));
+                }
                 break;
             }
             default : {
@@ -128,6 +141,10 @@ public class ForecastAdapter extends CursorAdapter {
 
         double low = cursor.getDouble(ForecastFragment.COL_WEATHER_MIN_TEMP);
         viewHolder.lowTempView.setText(Utility.formatTemperature(context, low, isMetric));
+    }
+
+    public void setUseTodayLayout(Boolean useTodayLayout) {
+        mUseTodayLayout = useTodayLayout;
     }
 
     /**

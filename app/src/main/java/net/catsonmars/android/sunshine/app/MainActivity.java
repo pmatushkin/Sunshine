@@ -8,8 +8,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import net.catsonmars.android.sunshine.app.data.WeatherContract;
-
 
 public class MainActivity extends ActionBarActivity
         implements ForecastFragment.Callback {
@@ -45,12 +43,8 @@ public class MainActivity extends ActionBarActivity
             mTwoPane = false;
         }
 
-
-//        if (savedInstanceState == null) {
-//            getSupportFragmentManager().beginTransaction()
-//                    .add(R.id.container, new ForecastFragment(), FORECASTFRAGMENT_TAG)
-//                    .commit();
-//        }
+        ForecastFragment forecastFragment = ((ForecastFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_forecast));
+        forecastFragment.setUseTodayLayout(!mTwoPane);
     }
 
     @Override

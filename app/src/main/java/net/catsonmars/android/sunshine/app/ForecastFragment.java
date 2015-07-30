@@ -60,6 +60,7 @@ public class ForecastFragment extends Fragment
     private ForecastAdapter mForecastAdapter;
     private int mForecastPosition = -1;
     private ListView mListView;
+    private Boolean mUseTodayLayout;
 
     /**
      * A callback interface that all activities containing this fragment must
@@ -162,6 +163,13 @@ public class ForecastFragment extends Fragment
         weatherTask.execute(location);
     }
 
+    public void setUseTodayLayout(boolean useTodayLayout) {
+        mUseTodayLayout = useTodayLayout;
+        if (mForecastAdapter != null) {
+            mForecastAdapter.setUseTodayLayout(mUseTodayLayout);
+        }
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              final Bundle savedInstanceState) {
@@ -172,6 +180,7 @@ public class ForecastFragment extends Fragment
 
         // The CursorAdapter will take data from our cursor and populate the ListView.
         mForecastAdapter = new ForecastAdapter(getActivity(), null, 0);
+        mForecastAdapter.setUseTodayLayout(mUseTodayLayout);
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
