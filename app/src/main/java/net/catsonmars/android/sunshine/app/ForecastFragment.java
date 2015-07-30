@@ -25,6 +25,7 @@ public class ForecastFragment extends Fragment
         implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int FORECAST_LOADER = 0;
+    static final String FORECAST_POSITION = "FORECAST_POSITION";
 
     static final String[] FORECAST_COLUMNS = {
             // In this case the id needs to be fully qualified with a table name, since
@@ -57,6 +58,8 @@ public class ForecastFragment extends Fragment
     static final int COL_COORD_LONG = 8;
 
     private ForecastAdapter mForecastAdapter;
+    private int mForecastPosition = -1;
+    private ListView mListView;
 
     /**
      * A callback interface that all activities containing this fragment must
@@ -111,6 +114,10 @@ public class ForecastFragment extends Fragment
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         mForecastAdapter.swapCursor(cursor);
+
+        if (ListView.INVALID_POSITION != mForecastPosition && null != mListView) {
+            mListView.smoothScrollToPosition(mForecastPosition);
+        }
     }
 
     @Override
@@ -140,6 +147,15 @@ public class ForecastFragment extends Fragment
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onSaveInstanceState (Bundle outState) {
+        if (mForecastPosition != ListView.INVALID_POSITION) {
+            outState.putInt(FORECAST_POSITION, mForecastPosition);
+        }
+
+        super.onSaveInstanceState(outState);
+    }
+
     private void updateWeather() {
         FetchWeatherTask weatherTask = new FetchWeatherTask(getActivity());
         String location = Utility.getPreferredLocation(getActivity());
@@ -148,35 +164,35 @@ public class ForecastFragment extends Fragment
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             final Bundle savedInstanceState) {
+        // Read the position of the currently selected forecast item
+        if (null != savedInstanceState) {
+            mForecastPosition = savedInstanceState.getInt(FORECAST_POSITION, ListView.INVALID_POSITION);
+        }
+
         // The CursorAdapter will take data from our cursor and populate the ListView.
         mForecastAdapter = new ForecastAdapter(getActivity(), null, 0);
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        ListView listView = (ListView)rootView.findViewById(R.id.listview_forecast);
-        listView.setAdapter(mForecastAdapter);
+        mListView = (ListView)rootView.findViewById(R.id.listview_forecast);
+        mListView.setAdapter(mForecastAdapter);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView adapterView, View view, int position, long l) {
+                // Save the position of the currently selected forecast item
+                mForecastPosition = position;
+
                 // CursorAdapter returns a cursor at the correct position for getItem(), or null
                 // if it cannot seek to that position.
                 Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
 
                 if (cursor != null) {
-//                    String locationSetting = Utility.getPreferredLocation(getActivity());
-//                    Intent intent = new Intent(getActivity(), DetailActivity.class)
-//                            .setData(WeatherContract.WeatherEntry.buildWeatherLocationWithDate(
-//                                    locationSetting,
-//                                    cursor.getLong(COL_WEATHER_DATE)
-//                            ));
-//                    startActivity(intent);
                     String locationSetting = Utility.getPreferredLocation(getActivity());
                     Uri dateUri = WeatherContract.WeatherEntry.buildWeatherLocationWithDate(locationSetting, cursor.getLong(COL_WEATHER_DATE));
 
-                    ((Callback)getActivity()).onItemSelected(dateUri);
+                    ((Callback) getActivity()).onItemSelected(dateUri);
                 }
             }
         });
