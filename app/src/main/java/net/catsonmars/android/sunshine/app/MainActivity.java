@@ -41,6 +41,12 @@ public class MainActivity extends ActionBarActivity
             }
         } else {
             mTwoPane = false;
+
+            // see 5.15_action_bar
+            // This will get rid of an unnecessary shadow below the action bar for smaller screen devices like phones.
+            // Then the action bar and Today item will appear to be on the same plane (as opposed to two different planes,
+            // where one casts a shadow on the other).
+            getSupportActionBar().setElevation(0f);
         }
 
         ForecastFragment forecastFragment = ((ForecastFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_forecast));
