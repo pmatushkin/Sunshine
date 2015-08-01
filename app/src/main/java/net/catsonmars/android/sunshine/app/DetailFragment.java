@@ -145,6 +145,7 @@ public class DetailFragment extends Fragment
             // Read date from cursor and update views for day of week and date
             String description = data.getString(COL_WEATHER_DESC);
             mDescriptionView.setText(description);
+            mIconView.setContentDescription(description);
 
             // Read high temperature from cursor and update view
             boolean isMetric = Utility.isMetric(getActivity());
