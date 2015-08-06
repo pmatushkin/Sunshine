@@ -1,5 +1,8 @@
 package net.catsonmars.android.sunshine.app;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -160,15 +163,18 @@ public class ForecastFragment extends Fragment
     }
 
     private void updateWeather() {
-//        FetchWeatherTask weatherTask = new FetchWeatherTask(getActivity());
-//        String location = Utility.getPreferredLocation(getActivity());
-//        weatherTask.execute(location);
-
         String location = Utility.getPreferredLocation(getActivity());
 
-        Intent intent = new Intent(getActivity(), SunshineService.class);
-        intent.putExtra(SunshineService.LOCATION_QUERY_EXTRA, location);
-        getActivity().startService(intent);
+        Intent alarmIntent = new Intent(getActivity(), SunshineService.AlarmReceiver.class);
+        alarmIntent.putExtra(SunshineService.LOCATION_QUERY_EXTRA, location);
+        //getActivity().startService(intent);
+
+        PendingIntent pi = PendingIntent.getBroadcast(getActivity(), 0, alarmIntent, PendingIntent.FLAG_ONE_SHOT);
+
+        AlarmManager alarmMgr = (AlarmManager)getActivity().getSystemService(Context.ALARM_SERVICE);
+        alarmMgr.set(AlarmManager.RTC_WAKEUP,
+                System.currentTimeMillis() + 5 * 1000,
+                pi);
     }
 
     public void setUseTodayLayout(boolean useTodayLayout) {
