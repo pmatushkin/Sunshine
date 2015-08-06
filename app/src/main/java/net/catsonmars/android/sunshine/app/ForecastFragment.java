@@ -1,5 +1,6 @@
 package net.catsonmars.android.sunshine.app;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import net.catsonmars.android.sunshine.app.data.WeatherContract;
+import net.catsonmars.android.sunshine.app.service.SunshineService;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -158,9 +160,15 @@ public class ForecastFragment extends Fragment
     }
 
     private void updateWeather() {
-        FetchWeatherTask weatherTask = new FetchWeatherTask(getActivity());
+//        FetchWeatherTask weatherTask = new FetchWeatherTask(getActivity());
+//        String location = Utility.getPreferredLocation(getActivity());
+//        weatherTask.execute(location);
+
         String location = Utility.getPreferredLocation(getActivity());
-        weatherTask.execute(location);
+
+        Intent intent = new Intent(getActivity(), SunshineService.class);
+        intent.putExtra(SunshineService.LOCATION_QUERY_EXTRA, location);
+        getActivity().startService(intent);
     }
 
     public void setUseTodayLayout(boolean useTodayLayout) {

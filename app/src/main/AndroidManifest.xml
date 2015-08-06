@@ -40,6 +40,9 @@
         <provider
             android:name=".data.WeatherProvider"
             android:authorities="net.catsonmars.android.sunshine.app" />
+
+        <service
+            android:name=".service.SunshineService" />
     </application>
 
 </manifest>
