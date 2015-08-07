@@ -37,10 +37,6 @@ public class ForecastAdapter extends CursorAdapter {
         return highLowStr;
     }
 
-    /*
-        This is ported from FetchWeatherTask --- but now we go straight from the cursor to the
-        string.
-     */
     private String convertCursorRowToUXFormat(Cursor cursor) {
         String highAndLow = formatHighLows(
                 cursor.getDouble(ForecastFragment.COL_WEATHER_MAX_TEMP),
