@@ -38,16 +38,6 @@ public class Utility {
                 .equals(context.getString(R.string.pref_units_metric));
     }
 
-//    static String formatTemperature(Context context, double temperature, boolean isMetric) {
-//        double temp;
-//        if ( !isMetric ) {
-//            temp = 9*temperature/5+32;
-//        } else {
-//            temp = temperature;
-//        }
-//        return context.getString(R.string.format_temperature, temp);
-//    }
-    
     public static String getFormattedWind(Context context, float windSpeed, float degrees) {
         int windFormat;
         if (Utility.isMetric(context)) {
