@@ -148,31 +148,8 @@ public class MainActivity extends ActionBarActivity
             startActivity(new Intent(this, SettingsActivity.class));
 
             return true;
-        } else if (id == R.id.action_map) {
-            openPreferredLocationInMap();
-
-            return true;
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    private void openPreferredLocationInMap() {
-
-        String location = Utility.getPreferredLocation(this);
-
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        if (intent.resolveActivity(getPackageManager()) != null) {
-
-            Uri geoLocation = Uri.parse("geo:0,0?").buildUpon()
-                    .appendQueryParameter("q", location)
-                    .build();
-
-            intent.setData(geoLocation);
-
-            startActivity(intent);
-        } else {
-            Log.d(LOG_TAG, String.format("Couldn't call %s, no map app found", location));
-        }
     }
 }

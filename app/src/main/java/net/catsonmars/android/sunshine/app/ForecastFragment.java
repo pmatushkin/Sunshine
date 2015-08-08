@@ -1,5 +1,6 @@
 package net.catsonmars.android.sunshine.app;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,6 +26,8 @@ import net.catsonmars.android.sunshine.app.sync.SunshineSyncAdapter;
  */
 public class ForecastFragment extends Fragment
         implements LoaderManager.LoaderCallbacks<Cursor> {
+
+    private final String LOG_TAG = ForecastFragment.class.getSimpleName();
 
     private static final int FORECAST_LOADER = 0;
     static final String FORECAST_POSITION = "FORECAST_POSITION";
@@ -144,6 +148,10 @@ public class ForecastFragment extends Fragment
             updateWeather();
 
             return true;
+        } else if (id == R.id.action_map) {
+            openPreferredLocationInMap();
+
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -212,5 +220,29 @@ public class ForecastFragment extends Fragment
         updateWeather();
 
         getLoaderManager().restartLoader(FORECAST_LOADER, null, this);
+    }
+
+    public void openPreferredLocationInMap() {
+        if (null != mForecastAdapter) {
+            Cursor cursor = mForecastAdapter.getCursor();
+
+            if (null != cursor) {
+                cursor.moveToFirst();
+
+                Double lat = cursor.getDouble(COL_COORD_LAT);
+                Double lon = cursor.getDouble(COL_COORD_LONG);
+
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+
+                Uri geoLocation = Uri.parse("geo:" + lat + "," + lon);
+                intent.setData(geoLocation);
+
+                if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+                    startActivity(intent);
+                } else {
+                    Log.d(LOG_TAG, String.format("Couldn't call %s, no map app found", geoLocation.toString()));
+                }
+            }
+        }
     }
 }
